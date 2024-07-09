@@ -2,35 +2,45 @@
 using namespace std;
 
 template <typename T>
-class node
-{
-public:
-    int key;
-    T data;
-    node* next;
-
-    //constructors
-    node() : key(0), data(0), next(NULL) {}
-    node(int key, T data) : key(key), data(data), next(NULL) {}
-};
-
-template <typename T>
 class singlylinkedlist
 {
 public:
-    node<T>* head;
-    //constructors
-    singlylinkedlist() : head(NULL) {}
-    singlylinkedlist(node<T>* head) : head(head) {}
+    class node
+    {
+    public:
+        int key;
+        T data;
+        node* next;
 
-    //methods
+        //constructors
+        node() : key(0), data(0), next(NULL) {}
+        node(int key, T data) : key(key), data(data), next(NULL) {}
+    };
+
+    node* head;
+    //constructor
+    singlylinkedlist() : head(NULL) {}
+
+    //destructor
+    ~singlylinkedlist()
+    {
+        node* current = head;
+        while (current != nullptr)
+        {
+            node* next = current->next;
+            delete current;
+            current = next;
+        }
+    }
+
+    // Public methods
 
     //check if node exists using key value
-    node<T>* nodeExists(int k)
+    node* nodeExists(int k) const
     {
-        node<T>* temp = NULL;
-        node<T>* ptr = head;
-        while (ptr != NULL)
+        node* temp = nullptr;
+        node* ptr = head;
+        while (ptr != nullptr)
         {
             if (ptr->key == k)
             {
@@ -43,23 +53,23 @@ public:
     }
 
     //append node at end of list
-    void appendNode(node<T>* n)
+    void appendNode(node* n)
     {
-        if (nodeExists(n->key) != NULL)
+        if (nodeExists(n->key))
         {
             cout << "Node already exists with key value " << n->key << '\n';
         }
         else
         {
-            if (head == NULL)
+            if (head == nullptr)
             {
                 head = n;
                 cout << "Node appended \n";
             }
             else
             {
-                node<T>* ptr = head;
-                while (ptr->next != NULL)
+                node* ptr = head;
+                while (ptr->next != nullptr)
                 {
                     ptr = ptr->next;
                 }
@@ -70,9 +80,9 @@ public:
     }
 
     //prepend node to beginning of the list
-    void prependNode(node<T>* n)
+    void prependNode(node* n)
     {
-        if (nodeExists(n->key) != NULL)
+        if (nodeExists(n->key) != nullptr)
         {
             cout << "Node already exists with key value " << n->key << '\n';
         }
@@ -85,14 +95,14 @@ public:
     }
 
     //insert a node after a particular node in the list
-    void insertNodeAfter(int key, node<T>* n)
+    void insertNodeAfter(int key, node* n)
     {
-        node<T>* ptr = nodeExists(key);
-        if (nodeExists(n->key) != NULL)
+        node* ptr = nodeExists(key);
+        if (nodeExists(n->key) != nullptr)
         {
             cout << "Node already exists with key value " << n->key << '\n';
         }
-        else if (ptr == NULL)
+        else if (ptr == nullptr)
         {
             cout << "Key not found \n";
         }
@@ -107,11 +117,11 @@ public:
     //delete node using key
     void deleteNodeKey(int key)
     {
-        if (head == NULL)
+        if (head == nullptr)
         {
             cout << "Singly linked list already empty, can't delete \n";
         }
-        else if (nodeExists(key) == NULL)
+        else if (nodeExists(key) == nullptr)
         {
             cout << "Key not found \n";
         }
@@ -119,16 +129,16 @@ public:
         {
             if (head->key == key)
             {
-                node<T>* temp = head;
+                node* temp = head;
                 head = head->next;
                 delete temp;
                 cout << "Node unlinked with key value " << key << '\n';
             }
             else
             {
-                node<T>* prevPtr = head;
-                node<T>* currentPtr = head->next;
-                while (currentPtr != NULL)
+                node* prevPtr = head;
+                node* currentPtr = head->next;
+                while (currentPtr != nullptr)
                 {
                     if (currentPtr->key == key)
                     {
@@ -147,8 +157,8 @@ public:
     //update node value
     void updateNode(int key, T data)
     {
-        node<T>* ptr = nodeExists(key);
-        if (ptr == NULL)
+        node* ptr = nodeExists(key);
+        if (ptr == nullptr)
         {
             cout << "Key does not exist \n";
         }
@@ -160,16 +170,16 @@ public:
     }
 
     //print entire list
-    void printList()
+    void printList() const
     {
-        node<T>* start = head;
-        if (start == NULL)
+        node* start = head;
+        if (start == nullptr)
         {
             cout << "No nodes in the singly linked list\n";
         }
         else
         {
-            while (start != NULL)
+            while (start != nullptr)
             {
                 cout << "(" << start->key << ", " << start->data << ") -> ";
                 start = start->next;
@@ -183,23 +193,18 @@ int main()
 {
     singlylinkedlist<int> s;
 
-    node<int>* n1 = new node<int>(1, 10);
-    node<int>* n2 = new node<int>(2, 20);
-    node<int>* n3 = new node<int>(3, 30);
-    node<int>* n4 = new node<int>(4, 40);
-
-    s.appendNode(n1);
-    s.appendNode(n2);
-    s.appendNode(n3);
+    s.appendNode(new singlylinkedlist<int>::node(1, 10));
+    s.appendNode(new singlylinkedlist<int>::node(2, 20));
+    s.appendNode(new singlylinkedlist<int>::node(3, 30));
 
     cout << "List after appending nodes:\n";
     s.printList();
 
-    s.prependNode(new node<int>(0, 5));
+    s.prependNode(new singlylinkedlist<int>::node(0, 5));
     cout << "List after prepending a node:\n";
     s.printList();
 
-    s.insertNodeAfter(1, new node<int>(1, 15));
+    s.insertNodeAfter(1, new singlylinkedlist<int>::node(1, 15));
     cout << "List after inserting a node after key 1:\n";
     s.printList();
 
